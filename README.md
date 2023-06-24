@@ -1,16 +1,13 @@
-## Badges
+<h1 align="center">Laravel Templating Engine</h1>
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/asiifdev/laraveltemplateengine.svg?style=flat-square)](https://packagist.org/packages/asiifdev/laraveltemplateengine)
 [![Total Downloads](https://img.shields.io/packagist/dt/asiifdev/laraveltemplateengine.svg?style=flat-square)](https://packagist.org/packages/asiifdev/laraveltemplateengine)
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/asiifdev/laraveltemplateengine/laravel.yml?branch=main&label=laravel&style=flat-square)](https://github.com/asiifdev/laraveltemplateengine/actions?query=workflow%3Alaravel+branch%3Amain)
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
-
-
-# Laravel Templating Engine
+<img src="https://komarev.com/ghpvc/?username=asiifdev&label=Profile%20views&color=0e75b6&style=flat" alt="asiifdev" />
 
 Ini adalah sebuah starter pack project Laravel Framework yang disertai dengan Role & Permission dari [Spatie Laravel Permissions](https://spatie.be/docs/laravel-permission/v5/introduction). selain starter pack,dengan Laravel Templating Engine ini kalian akan dimudahkan dalam pembuatan menu beserta form nya hanya dengan klik2 lewat panel dashboard yang juga sudah terdapat didalamnya.\
 #easyforuse \#custumizable \#free
-
 
 
 ## Tech Stack
@@ -54,4 +51,14 @@ Kemudian jalankan project nya dengan command
 ```
 
 Kemudian masuk ke host [Lokal](http://127.0.0.1:8000).
-    
+
+
+## Documentation
+COMING SOON !
+
+## Authors
+
+- [@asiifdev](https://www.github.com/asiifdev)
+
+<h3 align="left">Support:</h3>
+<p><a href="https://www.buymeacoffee.com/asiifdev"> <img align="left" src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" height="50" width="210" alt="asiifdev" /></a><a href="https://ko-fi.com/asiifdev"> <img align="left" src="https://cdn.ko-fi.com/cdn/kofi3.png?v=3" height="50" width="210" alt="asiifdev" /></a></p><br><br>
