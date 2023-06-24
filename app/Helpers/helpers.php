@@ -5,6 +5,7 @@ use App\Models\User;
 use App\Models\Identity;
 use Illuminate\Support\Str;
 use App\Models\DashboardLayout;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
@@ -31,7 +32,7 @@ if (!function_exists('moneyFormat')) {
 function getIdentity()
 {
     $data = [];
-    if (Schema::hasTable('identities')) {
+    if (DB::connection()->getDatabaseName()) {
         $data = Identity::first();
     }
     return $data;
@@ -47,7 +48,7 @@ function getIdentity()
 function getRoles($id)
 {
     $data = [];
-    if (Schema::hasTable('identities')) {
+    if (DB::connection()->getDatabaseName()) {
         if ($id) {
             $user = User::find($id);
             $role_id = $user->roles->first()->id;
@@ -69,7 +70,7 @@ function getRoles($id)
 function getCurrentMenu()
 {
     $data = [];
-    if (Schema::hasTable('identities')) {
+    if (DB::connection()->getDatabaseName()) {
         $url = "/" . request()->path();
         if ($url == "//") {
             $url = "/";
@@ -89,7 +90,7 @@ function getCurrentMenu()
 function getAllMenu()
 {
     $data = [];
-    if (Schema::hasTable('identities')) {
+    if (DB::connection()->getDatabaseName()) {
         $data = Menu::with('icons')->get();
     }
     return $data;
@@ -104,7 +105,7 @@ function getAllMenu()
 function getNameSpace()
 {
     $use = "use";
-    if (Schema::hasTable('identities')) {
+    if (DB::connection()->getDatabaseName()) {
         $menu = Menu::all();
         foreach ($menu as $item) {
             $use .= " " . $item->pathClass . "; ";
@@ -120,7 +121,7 @@ function getNameSpace()
  */
 function getRouting()
 {
-    if (Schema::hasTable('identities')) {
+    if (DB::connection()->getDatabaseName()) {
         $menu = Menu::all();
         foreach ($menu as $item) {
             $route = Route::get($item->url, $item->pathClass)->name($item->slug);
@@ -137,7 +138,7 @@ function getRouting()
 function getLayout()
 {
     $html = null;
-    if (Schema::hasTable('identities')) {
+    if (DB::connection()->getDatabaseName()) {
         $layout = DashboardLayout::first();
         if ($layout) {
             $array = [];
