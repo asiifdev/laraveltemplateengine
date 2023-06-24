@@ -38,30 +38,7 @@ Setting file .env seusaikan DATABASE nya dengan DATABASE yang kalian gunakan,kem
   php artisan migrate:fresh --seed
 ```
 
-ketika menjalankan command seeder,akan ada error seperti ini:
-```bash
-   Error 
-
-  Call to undefined function Database\Seeders\getAvatar()
-
-  at database\seeders\UserSeeder.php:20
-     16▕         $user = User::create([
-     17▕             "name" => "Role User",
-     18▕             "email" => "user@gmail.com",
-     19▕             "password" => bcrypt("password"),
-  ➜  20▕             "photo" => getAvatar('user@gmail.com')
-     21▕         ]);
-     22▕         $user->assignRole('user');
-     23▕
-     24▕         $admin = User::create([
-
-  1   vendor\laravel\framework\src\Illuminate\Container\BoundMethod.php:36
-      Database\Seeders\UserSeeder::run()
-
-  2   vendor\laravel\framework\src\Illuminate\Container\Util.php:41
-      Illuminate\Container\BoundMethod::Illuminate\Container\{closure}()
-```
-Abaikan saja,lanjut silahkan install package2 npm dan build projectnya dengan command
+lanjut silahkan install package2 npm dan build projectnya dengan command
 
 ```bash
   npm install && npm run build
