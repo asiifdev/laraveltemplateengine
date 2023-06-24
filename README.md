@@ -32,15 +32,15 @@ atau jika kalian ingin custom nama projectnya bisa juga dengan command
   cd {Nama Project yang kalian inginkan}
 ```
 
-#PENTING!!!
-Setelah installasi project selesai,silahkan buka file composer.json kalian dan tambahkan
+**PENTING!!!** \
+Setelah installasi project selesai,silahkan buka file composer.json kalian dan pada object autoload tambahkan:
 
 ```bash
 "files": [
     "app/Helpers/helpers.php"
 ]
 ```
-di object autoload. Sehingga hasilnya seperti ini
+Sehingga hasilnya seperti ini
 ```bash
 "autoload": {
     "psr-4": {
@@ -55,12 +55,12 @@ di object autoload. Sehingga hasilnya seperti ini
 ```
 kemudian jalankan command 
 ```bash
-    composer dump-autoload
+composer dump-autoload
 ```
 Setting file .env seusaikan DATABASE nya dengan DATABASE yang kalian gunakan,kemudian Migrasi Struktur DB dan Lakukan Seeder Role & User
 
 ```bash
-  php artisan migrate --seed
+  php artisan migrate:fresh --seed
 ```
 
 Setelah command migrasi dan seeder selesai,silahkan install package2 npm dan build projectnya dengan command
