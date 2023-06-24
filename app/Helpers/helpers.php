@@ -24,17 +24,6 @@ if (!function_exists('moneyFormat')) {
     }
 }
 
-function __construct()
-{
-    try {
-        DB::connection()->getPDO();
-        echo DB::connection()->getDatabaseName();
-        return true;
-    } catch (Exception $e) {
-        return false;
-    }
-}
-
 /**
  * getIdentity
  * @author ASIIFDEV <asiif.anwar3@gmail.com>

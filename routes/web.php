@@ -13,8 +13,11 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-getNameSpace();
-getRouting();
+if(function_exists('getNameSpace') && function_exists('getRouting')){
+    getNameSpace();
+    getRouting();
+}
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

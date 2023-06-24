@@ -2,13 +2,19 @@
     "name": "asiifdev/laraveltemplateengine",
     "type": "project",
     "description": "Template Engine for Laravel Framework.",
-    "keywords": ["laravel", "framework", "template engine"],
+    "keywords": [
+        "laravel",
+        "framework",
+        "template engine"
+    ],
     "license": "MIT",
     "author": "asiifdev",
-    "authors": [{
-        "name": "Muhammad Syaiful Anwar",
-        "email": "asiif.anwar3@gmail.com"
-    }],
+    "authors": [
+        {
+            "name": "Muhammad Syaiful Anwar",
+            "email": "asiif.anwar3@gmail.com"
+        }
+    ],
     "homepage": "https://laraveltemplateengine.com",
     "require": {
         "php": "^8.1",

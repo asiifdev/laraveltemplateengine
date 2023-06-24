@@ -9,17 +9,12 @@
 Ini adalah sebuah starter pack project Laravel Framework yang disertai dengan Role & Permission dari [Spatie Laravel Permissions](https://spatie.be/docs/laravel-permission/v5/introduction). selain starter pack,dengan Laravel Templating Engine ini kalian akan dimudahkan dalam pembuatan menu beserta form nya hanya dengan klik2 lewat panel dashboard yang juga sudah terdapat didalamnya.\
 #easyforuse \#custumizable \#free
 
-
 ## Tech Stack
 
 **1. [Laravel Versi 10](https://laravel.com/)** \
 **2. [Laravel Livewire](https://laravel-livewire.com/)** \
 **3. [Admin Panel Template (Acorn Bootstrap 5 Admin)](https://acorn-html-docs.coloredstrategies.com/Welcome.Introduction.html)**\
-**4. [Laravel Livewire](https://laravel-livewire.com/)** 
-
-
-
-
+**4. [Laravel Livewire](https://laravel-livewire.com/)**
 
 ## Installation
 
@@ -37,28 +32,58 @@ atau jika kalian ingin custom nama projectnya bisa juga dengan command
   cd {Nama Project yang kalian inginkan}
 ```
 
+#PENTING!!!
+Setelah installasi project selesai,silahkan buka file composer.json kalian dan tambahkan
+
+```bash
+"files": [
+    "app/Helpers/helpers.php"
+]
+```
+di object autoload. Sehingga hasilnya seperti ini
+```bash
+"autoload": {
+    "psr-4": {
+        "App\\": "app/",
+        "Database\\Factories\\": "database/factories/",
+        "Database\\Seeders\\": "database/seeders/"
+    },
+    "files": [
+        "app/Helpers/helpers.php"
+    ]
+},
+```
+kemudian jalankan command 
+```bash
+    composer dump-autoload
+```
 Setting file .env seusaikan DATABASE nya dengan DATABASE yang kalian gunakan,kemudian Migrasi Struktur DB dan Lakukan Seeder Role & User
+
 ```bash
   php artisan migrate --seed
 ```
+
 Setelah command migrasi dan seeder selesai,silahkan install package2 npm dan build projectnya dengan command
+
 ```bash
   npm install && npm run build
 ```
+
 Kemudian jalankan project nya dengan command
+
 ```bash
   php artisan serve
 ```
 
 Kemudian masuk ke host [Lokal](http://127.0.0.1:8000).
 
-
 ## Documentation
+
 COMING SOON !
 
 ## Authors
 
-- [@asiifdev](https://www.github.com/asiifdev)
+-   [@asiifdev](https://www.github.com/asiifdev)
 
 <h3 align="left">Support:</h3>
 <p><a href="https://www.buymeacoffee.com/asiifdev"> <img align="left" src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" height="50" width="210" alt="asiifdev" /></a><a href="https://ko-fi.com/asiifdev"> <img align="left" src="https://cdn.ko-fi.com/cdn/kofi3.png?v=3" height="50" width="210" alt="asiifdev" /></a></p><br><br>
