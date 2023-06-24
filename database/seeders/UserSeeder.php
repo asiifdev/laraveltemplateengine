@@ -13,11 +13,18 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
+        if (function_exists('getAvatar')) {
+            $photo = getAvatar('asiifdev@gmail.com');
+        }
+        else{
+            $photo = "";
+        }
+
         $user = User::create([
             "name" => "Role User",
             "email" => "user@gmail.com",
             "password" => bcrypt("password"),
-            "photo" => getAvatar('user@gmail.com')
+            "photo" => $photo
         ]);
         $user->assignRole('user');
 
@@ -25,7 +32,7 @@ class UserSeeder extends Seeder
             "name" => "Role Admin",
             "email" => "admin@gmail.com",
             "password" => bcrypt("password"),
-            "photo" => getAvatar('admin@gmail.com')
+            "photo" => $photo
         ]);
         $admin->assignRole('admin');
 
@@ -33,7 +40,7 @@ class UserSeeder extends Seeder
             "name" => "Role Super Admin",
             "email" => "super-admin@gmail.com",
             "password" => bcrypt("password"),
-            "photo" => getAvatar('super-admin@gmail.com')
+            "photo" => $photo
         ]);
         $superadmin->assignRole('super-admin');
     }
