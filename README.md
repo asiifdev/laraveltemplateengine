@@ -30,6 +30,14 @@ Install Laravel Templating Engine with composer
   composer create-project asiifdev/laraveltemplateengine
   cd laraveltemplateengine
 ```
+
+atau jika kalian ingin custom nama projectnya bisa juga dengan command
+
+```bash
+  composer create-project asiifdev/laraveltemplateengine {Nama Project yang kalian inginkan}
+  cd {Nama Project yang kalian inginkan}
+```
+
 Setting file .env seusaikan DATABASE nya dengan DATABASE yang kalian gunakan,kemudian Migrasi Struktur DB dan Lakukan Seeder Role & User
 ```bash
   php artisan migrate --seed
