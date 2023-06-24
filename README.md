@@ -1,6 +1,9 @@
+## Badges
+
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/asiifdev/laraveltemplateengine.svg?style=flat-square)](https://packagist.org/packages/asiifdev/laraveltemplateengine)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/asiifdev/laraveltemplateengine/laravel.yml?branch=main&label=laravel&style=flat-square)](https://github.com/asiifdev/laraveltemplateengine/actions?query=workflow%3Alaravel+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/asiifdev/laraveltemplateengine.svg?style=flat-square)](https://packagist.org/packages/asiifdev/laraveltemplateengine)
+[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/asiifdev/laraveltemplateengine/laravel.yml?branch=main&label=laravel&style=flat-square)](https://github.com/asiifdev/laraveltemplateengine/actions?query=workflow%3Alaravel+branch%3Amain)
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
 
 
 # Laravel Templating Engine
