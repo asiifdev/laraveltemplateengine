@@ -27,8 +27,8 @@ Ini adalah sebuah starter pack project Laravel Framework yang disertai dengan Ro
 Install Laravel Templating Engine with composer
 
 ```bash
-  composer create-project asiifdev/laraveltemplatingengine
-  cd laraveltemplatingengine
+  composer create-project asiifdev/laraveltemplateengine
+  cd laraveltemplateengine
 ```
 Setting file .env seusaikan DATABASE nya dengan DATABASE yang kalian gunakan,kemudian Migrasi Struktur DB dan Lakukan Seeder Role & User
 ```bash
