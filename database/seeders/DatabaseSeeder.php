@@ -14,5 +14,9 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(RolesAndPermissionsSeeder::class);
         $this->call(UserSeeder::class);
+        $this->call(DashboardLayoutSeeder::class);
+        $this->call(IdentitySeeder::class);
+        $this->call(IconSeeder::class);
+        $this->call(MenuSeeder::class);
     }
 }

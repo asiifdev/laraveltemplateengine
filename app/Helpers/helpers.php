@@ -1,8 +1,13 @@
 <?php
 
-use App\Models\Identity;
+use App\Models\Menu;
 use App\Models\User;
+use App\Models\Identity;
+use Illuminate\Support\Str;
+use App\Models\DashboardLayout;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Route;
+use PhpParser\Builder\Class_;
 
 if (!function_exists('moneyFormat')) {
     /**
@@ -39,15 +44,104 @@ function getIdentity()
 function getRoles($id)
 {
     $data = [];
-    if($id){
+    if ($id) {
         $user = User::find($id);
         $role_id = $user->roles->first()->id;
         $data = Role::find($role_id);
-    }
-    else{
+    } else {
         $data = Role::all();
     }
     return $data;
+}
+
+/**
+ * Mendapatkan Data Menu di path sekarang
+ * @author ASIIFDEV <asiif.anwar3@gmail.com>
+ * @property $url of user to get his role
+ * @param string $url
+ * @return object
+ */
+function getCurrentMenu()
+{
+    $data = [];
+    $url = "/" . request()->path();
+    if($url == "//"){
+        $url = "/";
+    }
+    $data = Menu::where('url', $url)->first();
+    return $data;
+}
+
+/**
+ * Mendapatkan Semua Menu di DB
+ * @author ASIIFDEV <asiif.anwar3@gmail.com>
+ * @property $url of user to get his role
+ * @param string $url
+ * @return object
+ */
+function getAllMenu()
+{
+    $data = Menu::with('icons')->get();
+    return $data;
+}
+
+/**
+ * Mendapatkan Data Namespace dari Tabel Menu di DB
+ * @author ASIIFDEV <asiif.anwar3@gmail.com>
+ * @property $url of user to get his role
+ * @return string
+ */
+function getNameSpace()
+{
+    $use = "use";
+    $menu = Menu::all();
+    foreach ($menu as $item) {
+        $use .= " " . $item->pathClass . "; ";
+    }
+    return $use;
+}
+
+/**
+ * Mendapatkan Routing berdasarkan Tabel Menu di DB
+ * @author ASIIFDEV <asiif.anwar3@gmail.com>
+ * @property $url of user to get his role
+ */
+function getRouting()
+{
+    $menu = Menu::all();
+    foreach ($menu as $item) {
+        $route = Route::get($item->url, $item->pathClass)->name($item->slug);
+    }
+    return $route;
+}
+
+/**
+ * Mendapatkan layout dashboard admin
+ * @author ASIIFDEV <asiif.anwar3@gmail.com>
+ * @return array
+ */
+function getLayout()
+{
+    $layout = DashboardLayout::first();
+    if ($layout) {
+        $array = [];
+        $data = [];
+        $array['placement'] = $layout->placement;
+        $array['behaviour'] = $layout->behaviour;
+        $array['radius'] = $layout->radius;
+        $array['color'] = $layout->color;
+        $array['navcolor'] = $layout->navcolor;
+        $data['attributes'] = (object) $array;
+        $data['layout'] = $layout->layout;
+        $data['footer'] = $layout->footer;
+        $data['storagePrefix'] = Str::slug(getIdentity()->name);
+        $data['showSettings'] = false;
+        $html = ["override" => json_encode($data)];
+    } else {
+        $html = null;
+    }
+
+    return $html;
 }
 
 /**
@@ -62,13 +156,14 @@ function getRoles($id)
  * @return string containing either just a URL or a complete image tag
  * @source https://gravatar.com/site/implement/images/php/
  */
-function getAvatar( $email, $s = 80, $d = 'wavatar', $r = 'g', $img = false, $atts = array() ) {
+function getAvatar($email, $s = 80, $d = 'wavatar', $r = 'g', $img = false, $atts = array())
+{
     $url = 'https://www.gravatar.com/avatar/';
-    $url .= md5( strtolower( trim( $email ) ) );
+    $url .= md5(strtolower(trim($email)));
     $url .= "?s=$s&d=$d&r=$r";
-    if ( $img ) {
+    if ($img) {
         $url = '<img src="' . $url . '"';
-        foreach ( $atts as $key => $val )
+        foreach ($atts as $key => $val)
             $url .= ' ' . $key . '="' . $val . '"';
         $url .= ' />';
     }

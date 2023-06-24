@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" data-url-prefix="/" data-footer="true"
-    @isset($html_tag_data)
-    @foreach ($html_tag_data as $key => $value)
+    @if(getLayout())
+    @foreach (getLayout() as $key => $value)
     data-{{ $key }}='{{ $value }}'
     @endforeach
-@endisset>
+@endif>
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <title>Acorn Admin Template | {{ $title }}</title>
-    <meta name="description" content="{{ $description }}" />
+    <title>{{ getIdentity()->name }} | {{ getCurrentMenu()->name }}</title>
+    <meta name="description" content="{{ getCurrentMenu()->description }}" />
     @include('dashboard._layouts.head')
 </head>
 
