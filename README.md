@@ -13,10 +13,10 @@ Ini adalah sebuah starter pack project Laravel Framework yang disertai dengan Ro
 
 ## Tech Stack
 
-**1. [Laravel Versi 10]("https://laravel.com/")** \
-**2. [Laravel Livewire]("https://laravel-livewire.com/")** \
-**3. [Admin Panel Template (Acorn Bootstrap 5 Admin)]("https://acorn-html-docs.coloredstrategies.com/Welcome.Introduction.html")**\
-**4. [Laravel Livewire]("https://laravel-livewire.com/")** 
+**1. [Laravel Versi 10](https://laravel.com/)** \
+**2. [Laravel Livewire](https://laravel-livewire.com/)** \
+**3. [Admin Panel Template (Acorn Bootstrap 5 Admin)](https://acorn-html-docs.coloredstrategies.com/Welcome.Introduction.html)**\
+**4. [Laravel Livewire](https://laravel-livewire.com/)** 
 
 
 
@@ -39,5 +39,5 @@ Setelah command migrasi dan seeder selesai,silahkan jalankan project kalian deng
   php artisan serve
 ```
 
-Kemudian masuk ke host [Lokal]("http://127.0.0.1:8000").
+Kemudian masuk ke host [Lokal](http://127.0.0.1:8000).
     
