@@ -23,4 +23,6 @@ Homestead.json
 .phpunit.result.cache
 
 .git**
-.github
+.github/
+
+public/build
