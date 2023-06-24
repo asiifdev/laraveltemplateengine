@@ -34,7 +34,11 @@ Setting file .env seusaikan DATABASE nya dengan DATABASE yang kalian gunakan,kem
 ```bash
   php artisan migrate --seed
 ```
-Setelah command migrasi dan seeder selesai,silahkan jalankan project kalian dengan command
+Setelah command migrasi dan seeder selesai,silahkan install package2 npm dan build projectnya dengan command
+```bash
+  npm install && npm run build
+```
+Kemudian jalankan project nya dengan command
 ```bash
   php artisan serve
 ```
