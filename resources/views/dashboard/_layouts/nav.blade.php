@@ -27,8 +27,8 @@
     <div class="user-container d-flex">
         <a href="#" class="d-flex user position-relative" data-bs-toggle="dropdown" aria-haspopup="true"
             aria-expanded="false">
-            <img class="profile" alt="profile" src="{{ asset('dashboard/img/profile/profile-9.webp') }}" />
-            <div class="name">Lisa Jackson</div>
+            <img class="profile" alt="profile" src="{{ getProfile()->photo }}" />
+            <div class="name">{{ getProfile()->name }}</div>
         </a>
         <div class="dropdown-menu dropdown-menu-end user-menu wide">
             <div class="row mb-3 ms-0 me-0">
@@ -113,10 +113,14 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="{{ route('logout') }}"
+                                onclick="event.preventDefault();document.getElementById('logout-form').submit();">
                                 <i data-acorn-icon="logout" class="me-2" data-acorn-size="17"></i>
                                 <span class="align-middle">Logout</span>
                             </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                @csrf
+                            </form>
                         </li>
                     </ul>
                 </div>
@@ -194,18 +198,42 @@
     <div class="menu-container flex-grow-1">
         <ul id="menu" class="menu">
             @foreach (getAllMenu() as $item)
-                <li>
-                    <a href="{{ url($item->url) }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"
-                            fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                            stroke-linejoin="round"
-                            class="acorn-icons acorn-icons-balance d-inline-block text-white">
-                            {!! $item->icons->svg !!}
-                        </svg>
-                        <i data-acorn-icon="{{ $item->icons->name }}" class="icon" data-acorn-size="18"></i>
-                        <span class="label">{{ $item->name }}</span>
-                    </a>
-                </li>
+                @if ($item->parent_id == 0)
+                    @php
+                        $id_parent = ucfirst($item->slug);
+                        $url_parent = '/' . $item->slug;
+                    @endphp
+                    <li>
+                        @if (count($item->child) > 0)
+                            <a href="#{{ $id_parent }}">
+                                <i data-acorn-icon="home-garage" class="icon" data-acorn-size="20"></i>
+                                <span class="label">{{ $item->name }}</span>
+                            </a>
+                            <ul id="{{ $id_parent }}">
+                                @foreach ($item->child as $child)
+                                    <li
+                                        class="{{ request()->path() == getIdentity()->path . $url_parent . $child->url ? 'active' : '' }}">
+                                        <a href="{{ url(getIdentity()->path . $url_parent . $child->url) }}">
+                                            <span class="label">{{ $child->name }}</span>
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @else
+                            <a href="{{ url(getIdentity()->path . $item->url) }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                    viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"
+                                    stroke-linecap="round" stroke-linejoin="round"
+                                    class="acorn-icons acorn-icons-balance d-inline-block text-white">
+                                    {!! $item->icons->svg !!}
+                                </svg>
+                                <i data-acorn-icon="{{ $item->icons->name }}" class="icon"
+                                    data-acorn-size="18"></i>
+                                <span class="label">{{ $item->name }}</span>
+                            </a>
+                        @endif
+                    </li>
+                @endif
             @endforeach
         </ul>
     </div>

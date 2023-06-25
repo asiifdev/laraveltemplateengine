@@ -13,4 +13,12 @@ class Menu extends Model
     public function icons() {
         return $this->belongsTo(Icon::class, 'icon_id');
     }
+
+    public function child(){
+        return $this->hasMany(self::class, 'parent_id', 'id');
+    }
+
+    public function parent(){
+        return $this->belongsTo(self::class);
+    }
 }

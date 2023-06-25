@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Menu;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -23,6 +24,12 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $menu = Menu::all();
+        foreach ($menu as $item) {
+            $route = [str_replace('"', "", str_replace(",", "|", 'role:' . $item->roles))];
+            $group[] = $route;
+        }
+        // dd($group);
         dd(getRouting());
         return view('home');
     }

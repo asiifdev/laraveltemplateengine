@@ -36,6 +36,17 @@ function getIdentity()
 }
 
 /**
+ * getProfile
+ * @author ASIIFDEV <asiif.anwar3@gmail.com>
+ * @return object
+ */
+function getProfile()
+{
+    $data = auth()->user();
+    return $data;
+}
+
+/**
  * Mendapatkan list semua role atau ambil role dari seorang user
  * @author ASIIFDEV <asiif.anwar3@gmail.com>
  * @property $id of user to get his role
@@ -65,13 +76,61 @@ function getRoles($id)
 function getCurrentMenu()
 {
     $data = [];
-    $url = "/" . request()->path();
-    if ($url == "//") {
-        $url = "/";
-    }
-    $data = Menu::where('url', $url)->first();
+    $url = "/" . str_replace(getIdentity()->path, "", last(request()->segments()));
+    // $url = "/" . last(request()->segments());
+    // if ($url == "") {
+    //     $url = "/";
+    // }
+    $data = Menu::where('url', $url)->with('parent')->first();
+    // dd($url);
     return $data;
 }
+
+/**
+ * Multidimension Array to Single Array
+ * @author ASIIFDEV <asiif.anwar3@gmail.com>
+ * @property $array to convert
+ * @param array $array
+ * @return mixed
+ */
+function array_flatten($array)
+{
+    if (!is_array($array)) {
+        return FALSE;
+    }
+    $result = array();
+    foreach ($array as $key => $value) {
+        if (is_array($value)) {
+            $result = array_merge($result, array_flatten($value));
+        } else {
+            $result[$key] = $value;
+        }
+    }
+    return $result;
+}
+
+/**
+ * Mendapatkan Breadcrumbs di menu
+ * @author ASIIFDEV <asiif.anwar3@gmail.com>
+ * @return object
+ */
+function getBreadCrumbs()
+{
+    $path = request()->segments();
+    $urls = [];
+    foreach ($path as $item) {
+        $url = "/" . $item;
+        $menu = Menu::where('url', $url)->first();
+        $dashboardUrl = $url == "/" . getIdentity()->path ? "Dashboard" : "Entah";
+        $name = $menu ? $menu->name : $dashboardUrl;
+        $data = [
+            $url => $name
+        ];
+        $urls[] = $data;
+    }
+    return array_flatten($urls);
+}
+
 
 /**
  * Mendapatkan Semua Menu di DB
@@ -82,7 +141,7 @@ function getCurrentMenu()
  */
 function getAllMenu()
 {
-    $data = Menu::with('icons')->get();
+    $data = Menu::with('icons', 'child')->orderBy('name', 'ASC')->get();
     return $data;
 }
 
@@ -102,6 +161,7 @@ function getNameSpace()
     return $use;
 }
 
+
 /**
  * Mendapatkan Routing berdasarkan Tabel Menu di DB
  * @author ASIIFDEV <asiif.anwar3@gmail.com>
@@ -109,10 +169,21 @@ function getNameSpace()
  */
 function getRouting()
 {
-    $menu = Menu::all();
-    foreach ($menu as $item) {
-        $route = Route::get($item->url, $item->pathClass)->name($item->slug);
-    }
+    $route = Route::group(['prefix' => getIdentity()->path, 'as' => 'dashboard.'], function () {
+        $menu = Menu::with('child')->get();
+        foreach ($menu as $item) {
+            if ($item->parent_id == 0) {
+                $url_parent = $item->slug;
+                if (count($item->child) > 0) {
+                    foreach ($item->child as $child) {
+                        Route::get($url_parent . $child->url, $child->pathClass)->middleware([str_replace('"', "", str_replace(",", "|", 'role:' . $child->roles))])->name($url_parent . "." . $child->slug);
+                    }
+                } else {
+                    Route::get($item->url, $item->pathClass)->middleware([str_replace('"', "", str_replace(",", "|", 'role:' . $item->roles))])->name($item->slug);
+                }
+            }
+        }
+    });
     return $route;
 }
 

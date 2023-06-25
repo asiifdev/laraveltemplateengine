@@ -19,6 +19,7 @@ class IdentitySeeder extends Seeder
             "phone" => "6282134462498",
             "logo" => "",
             "slogan" => "",
+            "path" => "admin"
         ]);
     }
 }

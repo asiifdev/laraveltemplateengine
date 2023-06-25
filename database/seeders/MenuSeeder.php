@@ -21,23 +21,54 @@ class MenuSeeder extends Seeder
             $roleName[] = $item->name;
         }
         Menu::create([
+            "name" => "Settings",
+            "icon_id" => 5,
+            "url" => "/settings",
+            "slug" => Str::slug("Settings"),
+        ]);
+
+        Menu::create([
+            "name" => "Dashboard",
+            "roles" => str_replace(array('[',']'),"", json_encode($roleName)),
+            "icon_id" => 20,
+            "url" => "/",
+            "description" => "Menu Mengelola Dashboard",
+            "slug" => Str::slug("Dashboard"),
+            "pathClass" => "App\Http\Livewire\Dashboard",
+            "nameClass" => "Dashboard"
+        ]);
+
+        Menu::create([
             "name" => "Master Menu",
-            "roles" => json_encode($roleName),
+            "roles" => str_replace(array('[',']'),"", json_encode($roleName)),
             "icon_id" => 5,
             "url" => "/",
             "description" => "Menu Mengelola Master Menu",
             "slug" => Str::slug("Master Menu"),
             "pathClass" => "App\Http\Livewire\MasterMenu",
-            "nameClass" => "MasterMenu"
+            "nameClass" => "MasterMenu",
+            "parent_id" => 1
         ]);
 
         Menu::create([
             "name" => "Master Template",
-            "roles" => json_encode($roleName),
+            "roles" => str_replace(array('[',']'),"", json_encode($roleName)),
             "icon_id" => 10,
             "url" => "/template",
             "description" => "Menu Master Template Livewire",
             "slug" => Str::slug("Master Template"),
+            "pathClass" => "App\Http\Livewire\MasterTemplate",
+            "nameClass" => "MasterTemplate",
+            "parent_id" => 1
+        ]);
+
+        Menu::create([
+            "name" => "Template Tanpa parent",
+            "roles" => str_replace(array('[',']'),"", json_encode($roleName)),
+            "icon_id" => 8,
+            "url" => "/template-tanpa-prent",
+            "description" => "Menu Master Template Livewire",
+            "slug" => Str::slug("Template Tanpa Parent"),
             "pathClass" => "App\Http\Livewire\MasterTemplate",
             "nameClass" => "MasterTemplate"
         ]);
