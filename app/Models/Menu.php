@@ -14,6 +14,10 @@ class Menu extends Model
         return $this->belongsTo(Icon::class, 'icon_id');
     }
 
+    public function form(){
+        return $this->hasMany(MigrationForm::class, 'menu_id', 'id');
+    }
+
     public function child(){
         return $this->hasMany(self::class, 'parent_id', 'id');
     }

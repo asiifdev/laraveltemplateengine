@@ -14,6 +14,6 @@ class MasterTemplate extends Component
     }
 
     public function mount(){
-        // dd(getCurrentMenu());
+        // dd(getActiveNavbar('/template'));
     }
 }

@@ -18,5 +18,6 @@ class DatabaseSeeder extends Seeder
         $this->call(IdentitySeeder::class);
         $this->call(IconSeeder::class);
         $this->call(MenuSeeder::class);
+        $this->call(FormSeeder::class);
     }
 }

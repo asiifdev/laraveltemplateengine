@@ -5,10 +5,12 @@ use App\Models\User;
 use App\Models\Identity;
 use Illuminate\Support\Str;
 use App\Models\DashboardLayout;
-use Illuminate\Database\Connection;
+use App\Models\MigrationForm;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
+use Illuminate\Database\Connection;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Schema;
 
 if (!function_exists('moneyFormat')) {
     /**
@@ -67,23 +69,67 @@ function getRoles($id)
 }
 
 /**
+ * Mendapatkan form dari masing2 menu
+ * @author ASIIFDEV <asiif.anwar3@gmail.com>
+ * @property $id of user to get his form
+ * @param int $id
+ * @return object
+ */
+function getForm($id)
+{
+    $data = MigrationForm::where('migration_id', $id)->where('is_show', true)->get();
+    return $data;
+}
+
+// /**
+//  * Mendapatkan form dari masing2 menu
+//  * @author ASIIFDEV <asiif.anwar3@gmail.com>
+//  * @property $id of user to get his form
+//  * @param int $id
+//  * @return object
+//  */
+// function getTableData($id)
+// {
+//     $data = [];
+//     $form = MigrationForm::where('migration_id', $id)->where('is_show', true)->get('column');
+//     foreach($form as $item){
+
+//     }
+//     return $data;
+// }
+
+/**
  * Mendapatkan Data Menu di path sekarang
  * @author ASIIFDEV <asiif.anwar3@gmail.com>
- * @property $url of user to get his role
- * @param string $url
  * @return object
  */
 function getCurrentMenu()
 {
     $data = [];
-    $url = "/" . str_replace(getIdentity()->path, "", last(request()->segments()));
-    // $url = "/" . last(request()->segments());
-    // if ($url == "") {
-    //     $url = "/";
-    // }
+    $url = "/" . request()->path();
     $data = Menu::where('url', $url)->with('parent')->first();
     // dd($url);
     return $data;
+}
+
+/**
+ * Mendapatkan Data Menu di path sekarang
+ * @author ASIIFDEV <asiif.anwar3@gmail.com>
+ * @return bool
+ */
+function getActiveNavbar($url)
+{
+    $hasil = false;
+    $path = "/" . request()->path();
+    $cek = Menu::where('url', $path)->first();
+    if ($cek != NULL) {
+        if ($url == $cek->url) {
+            $hasil = true;
+        }
+    }
+    // dd($path);
+
+    return $hasil;
 }
 
 /**
@@ -118,9 +164,11 @@ function getBreadCrumbs()
 {
     $path = request()->segments();
     $urls = [];
+    $menu = Menu::all();
+    $url = "/";
     foreach ($path as $item) {
-        $url = "/" . $item;
-        $menu = Menu::where('url', $url)->first();
+        $url .= $item . "/";
+        $menu = Menu::where('url', substr_replace($url, "", -1))->first();
         $dashboardUrl = $url == "/" . getIdentity()->path ? "Dashboard" : "Entah";
         $name = $menu ? $menu->name : $dashboardUrl;
         $data = [
@@ -128,20 +176,40 @@ function getBreadCrumbs()
         ];
         $urls[] = $data;
     }
+    // dd(array_flatten($urls));
     return array_flatten($urls);
 }
 
 
 /**
  * Mendapatkan Semua Menu di DB
+ * @property $parent_id optional parent ID
+ * @param int $parent_id
  * @author ASIIFDEV <asiif.anwar3@gmail.com>
- * @property $url of user to get his role
- * @param string $url
  * @return object
  */
-function getAllMenu()
+function getAllMenu($parent_id = false)
 {
-    $data = Menu::with('icons', 'child')->orderBy('name', 'ASC')->get();
+    $data = Menu::with('icons', 'child')->orderBy('urutan', 'ASC')->where('parent_id', 0)->get();
+    if ($parent_id) {
+        $data = Menu::with('icons', 'child')->orderBy('urutan', 'ASC')->where('parent_id', $parent_id)->get();
+    }
+    return $data;
+}
+
+/**
+ * Get Collection Roles With Custom Symbol
+ * @author ASIIFDEV <asiif.anwar3@gmail.com>
+ * @property $roles of user to get his role
+ * @property $symbol to set jeda antar string role
+ * @param array $roles
+ * @param string $symbol
+ * @return string
+ */
+function collectionOfRoles($roles, $symbol = "")
+{
+    $data = str_replace('"', "", str_replace(",", "|", $symbol . $roles));
+    // dd($data);
     return $data;
 }
 
@@ -169,18 +237,22 @@ function getNameSpace()
  */
 function getRouting()
 {
-    $route = Route::group(['prefix' => getIdentity()->path, 'as' => 'dashboard.'], function () {
-        $menu = Menu::with('child')->get();
+    $route = Route::middleware(['auth'])->name('admin.')->group(function () {
+        $menu = Menu::with('child')->where('parent_id', 0)->get();
         foreach ($menu as $item) {
-            if ($item->parent_id == 0) {
-                $url_parent = $item->slug;
-                if (count($item->child) > 0) {
-                    foreach ($item->child as $child) {
-                        Route::get($url_parent . $child->url, $child->pathClass)->middleware([str_replace('"', "", str_replace(",", "|", 'role:' . $child->roles))])->name($url_parent . "." . $child->slug);
-                    }
-                } else {
-                    Route::get($item->url, $item->pathClass)->middleware([str_replace('"', "", str_replace(",", "|", 'role:' . $item->roles))])->name($item->slug);
+            $url_parent = $item->slug;
+            if (count($item->child) > 0) {
+                foreach ($item->child as $child) {
+                    Route::get($item->url, $item->pathClass)->middleware([collectionOfRoles($item->roles, "role:")])->name($item->slug);
+                    Route::get($child->url, $child->pathClass)->middleware([collectionOfRoles($child->roles, "role:")])->name($url_parent . "." . $child->slug);
                 }
+                if (count($child->child) > 0) {
+                    foreach ($child->child as $childs) {
+                        Route::get($childs->url, $childs->pathClass)->middleware([collectionOfRoles($childs->roles, "role:")])->name($url_parent . "." . $childs->slug);
+                    }
+                }
+            } else {
+                Route::get($item->url, $item->pathClass)->middleware([collectionOfRoles($item->roles, "role:")])->name($item->slug);
             }
         }
     });
@@ -240,4 +312,20 @@ function getAvatar($email, $s = 80, $d = 'wavatar', $r = 'g', $img = false, $att
         $url .= ' />';
     }
     return $url;
+}
+
+function getTableColumns($table = false)
+{
+    if ($table) {
+        $q = DB::select('DESCRIBE ' . $table);
+        return $q;
+    }
+    $data = [];
+    $table = DB::getSchemaBuilder()->getAllTables();
+    $dbName = 'Tables_in_' . DB::getDatabaseName();
+    foreach ($table as $item) {
+        $q = DB::select('DESCRIBE ' . $item->$dbName);
+        $data[$item->$dbName] = $q;
+    }
+    return $data;
 }

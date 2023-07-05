@@ -17,60 +17,78 @@ class MenuSeeder extends Seeder
     {
         $roleName = [];
         $roles = Role::all();
-        foreach($roles as $item){
+        $pathAdmin = "";
+        if (function_exists("getIdentity")) {
+            $pathAdmin = getIdentity()->path;
+        } else {
+            $pathAdmin = "admin";
+        }
+
+        foreach ($roles as $item) {
             $roleName[] = $item->name;
         }
+
         Menu::create([
             "name" => "Settings",
             "icon_id" => 5,
-            "url" => "/settings",
+            "url" => "/" . $pathAdmin . "/settings",
             "slug" => Str::slug("Settings"),
-        ]);
-
-        Menu::create([
-            "name" => "Dashboard",
-            "roles" => str_replace(array('[',']'),"", json_encode($roleName)),
-            "icon_id" => 20,
-            "url" => "/",
-            "description" => "Menu Mengelola Dashboard",
-            "slug" => Str::slug("Dashboard"),
-            "pathClass" => "App\Http\Livewire\Dashboard",
-            "nameClass" => "Dashboard"
+            "roles" => str_replace(array('[', ']'), "", json_encode($roleName)),
+            "pathClass" => "App\Http\Livewire\Settings",
+            "urutan" => 1,
+            "nameClass" => "Settings",
         ]);
 
         Menu::create([
             "name" => "Master Menu",
-            "roles" => str_replace(array('[',']'),"", json_encode($roleName)),
+            "roles" => str_replace(array('[', ']'), "", json_encode($roleName)),
             "icon_id" => 5,
-            "url" => "/",
+            "url" => '/' . $pathAdmin . "/settings/menu",
             "description" => "Menu Mengelola Master Menu",
             "slug" => Str::slug("Master Menu"),
             "pathClass" => "App\Http\Livewire\MasterMenu",
             "nameClass" => "MasterMenu",
+            "migration_id" => 10,
+            "urutan" => 2,
             "parent_id" => 1
         ]);
 
         Menu::create([
             "name" => "Master Template",
-            "roles" => str_replace(array('[',']'),"", json_encode($roleName)),
+            "roles" => str_replace(array('[', ']'), "", json_encode($roleName)),
             "icon_id" => 10,
-            "url" => "/template",
+            "url" => '/' . $pathAdmin . "/settings/template",
             "description" => "Menu Master Template Livewire",
             "slug" => Str::slug("Master Template"),
             "pathClass" => "App\Http\Livewire\MasterTemplate",
             "nameClass" => "MasterTemplate",
+            "urutan" => 3,
             "parent_id" => 1
         ]);
 
         Menu::create([
             "name" => "Template Tanpa parent",
-            "roles" => str_replace(array('[',']'),"", json_encode($roleName)),
+            "roles" => '"admin","super-admin"',
             "icon_id" => 8,
-            "url" => "/template-tanpa-prent",
+            "url" => '/' . $pathAdmin . "/template-tanpa-prent",
             "description" => "Menu Master Template Livewire",
             "slug" => Str::slug("Template Tanpa Parent"),
             "pathClass" => "App\Http\Livewire\MasterTemplate",
+            "urutan" => 4,
             "nameClass" => "MasterTemplate"
+        ]);
+
+
+        Menu::create([
+            "name" => "Dashboard",
+            "roles" => str_replace(array('[', ']'), "", json_encode($roleName)),
+            "icon_id" => 20,
+            "url" => "/" . $pathAdmin,
+            "description" => "Menu Mengelola Dashboard",
+            "slug" => Str::slug("Dashboard"),
+            "pathClass" => "App\Http\Livewire\Dashboard",
+            "urutan" => 5,
+            "nameClass" => "Dashboard"
         ]);
     }
 }

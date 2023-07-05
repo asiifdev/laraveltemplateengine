@@ -17,12 +17,14 @@ return new class extends Migration
             $table->text('roles')->nullable();
             $table->unsignedBigInteger('icon_id')->nullable();
             $table->foreign('icon_id')->references('id')->on('icons');
+            $table->unsignedBigInteger('migration_id')->default(0);
             $table->string('url');
             $table->string('slug')->nullable();
             $table->text('description')->nullable();
             $table->string('pathClass')->nullable();
             $table->string('nameClass')->nullable();
             $table->integer('parent_id')->default(0);
+            $table->integer('urutan')->unique();
             $table->timestamps();
         });
     }

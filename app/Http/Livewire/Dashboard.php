@@ -12,4 +12,8 @@ class Dashboard extends Component
         ->extends('dashboard.layout')
         ->section('content');
     }
+
+    public function mount(){
+        // dd(getActiveNavbar('/'));
+    }
 }

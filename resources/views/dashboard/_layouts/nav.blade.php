@@ -198,42 +198,68 @@
     <div class="menu-container flex-grow-1">
         <ul id="menu" class="menu">
             @foreach (getAllMenu() as $item)
-                @if ($item->parent_id == 0)
-                    @php
-                        $id_parent = ucfirst($item->slug);
-                        $url_parent = '/' . $item->slug;
-                    @endphp
-                    <li>
-                        @if (count($item->child) > 0)
+                @php
+                    $id_parent = ucfirst($item->slug);
+                @endphp
+                @role(collectionOfRoles($item->roles))
+                    @if (count($item->child) > 0)
+                        <li class="{{ getActiveNavbar($item->url) ? 'active' : '' }}">
                             <a href="#{{ $id_parent }}">
                                 <i data-acorn-icon="home-garage" class="icon" data-acorn-size="20"></i>
                                 <span class="label">{{ $item->name }}</span>
                             </a>
-                            <ul id="{{ $id_parent }}">
+                            <ul id="{{ $id_parent }}" class="{{ getActiveNavbar($item->url) ? 'show' : '' }}">
                                 @foreach ($item->child as $child)
-                                    <li
-                                        class="{{ request()->path() == getIdentity()->path . $url_parent . $child->url ? 'active' : '' }}">
-                                        <a href="{{ url(getIdentity()->path . $url_parent . $child->url) }}">
-                                            <span class="label">{{ $child->name }}</span>
-                                        </a>
-                                    </li>
+                                    @role(collectionOfRoles($child->roles))
+                                        @if (count($child->child) > 0)
+                                            @php
+                                                $id_child = str_replace('-', '', ucfirst($child->slug));
+                                            @endphp
+                                            @foreach ($child->child as $childs)
+                                                @role(collectionOfRoles($child->roles))
+                                                    <li class="{{ getActiveNavbar($child->url) ? 'active' : '' }}">
+                                                        <a href="#{{ $id_child }}">
+                                                            <span class="label">{{ $child->name }}</span>
+                                                        </a>
+                                                        <ul id="{{ $id_child }}"
+                                                            class="{{ getActiveNavbar($child->url) ? 'show' : '' }}">
+                                                            @role(collectionOfRoles($childs->roles))
+                                                                <li class="{{ getActiveNavbar($childs->url) ? 'active' : '' }}">
+                                                                    <a href="{{ $childs->url }}">
+                                                                        <span class="label">{{ $childs->name }}</span>
+                                                                    </a>
+                                                                </li>
+                                                            @endrole
+                                                        </ul>
+                                                    </li>
+                                                @endrole
+                                            @endforeach
+                                        @else
+                                            <li class="{{ getActiveNavbar($child->url) ? 'active' : '' }}">
+                                                <a href="{{ $child->url }}">
+                                                    <span class="label">{{ $child->name }}</span>
+                                                </a>
+                                            </li>
+                                        @endif
+                                    @endrole
                                 @endforeach
                             </ul>
-                        @else
-                            <a href="{{ url(getIdentity()->path . $item->url) }}">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                                    viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"
+                        </li>
+                    @else
+                        <li class="{{ getActiveNavbar($item->url) ? 'active' : '' }}">
+                            <a href="{{ $item->url }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                    viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"
                                     stroke-linecap="round" stroke-linejoin="round"
                                     class="acorn-icons acorn-icons-balance d-inline-block text-white">
                                     {!! $item->icons->svg !!}
                                 </svg>
-                                <i data-acorn-icon="{{ $item->icons->name }}" class="icon"
-                                    data-acorn-size="18"></i>
+                                <i data-acorn-icon="{{ $item->icons->name }}" class="icon" data-acorn-size="18"></i>
                                 <span class="label">{{ $item->name }}</span>
                             </a>
-                        @endif
-                    </li>
-                @endif
+                        </li>
+                    @endif
+                @endrole
             @endforeach
         </ul>
     </div>

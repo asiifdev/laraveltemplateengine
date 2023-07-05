@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" data-url-prefix="/" data-footer="true"
-    @if(getLayout())
-    @foreach (getLayout() as $key => $value)
+    @if (getLayout()) @foreach (getLayout() as $key => $value)
     data-{{ $key }}='{{ $value }}'
-    @endforeach
-@endif>
+    @endforeach @endif>
 
 <head>
     <meta charset="UTF-8" />
@@ -12,6 +10,12 @@
     <title>{{ getIdentity()->name }} | {{ getCurrentMenu()->name }}</title>
     <meta name="description" content="{{ getCurrentMenu()->description }}" />
     @include('dashboard._layouts.head')
+    <style>
+        .nonactive {
+            background: none !important;
+            box-shadow: none !important;
+        }
+    </style>
 </head>
 
 <body>
